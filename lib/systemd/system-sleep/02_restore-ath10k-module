@@ -1,0 +1,16 @@
+#!/bin/bash
+if [ "${1}" == "pre" ]; then
+  # /sbin/modprobe -rf ath10k_pci
+  # /bin/sleep 1
+  # /sbin/modprobe -rf ath10k_core
+  # /bin/sleep 1
+  # Commented out the above as it should be taken care of by NetworkManager now
+  # - had to use NetworkManager dispatcher script to solve race condition
+  #   /etc/NetworkManager/dispatcher.d/pre-down.d/01_preempt-ath10k-crash
+  /bin/true
+elif [ "${1}" == "post" ]; then
+  # Reloading ath10k driver still needed after suspend
+  /bin/sleep 2
+  /sbin/modprobe ath10k_pci
+  /bin/sleep 2
+fi

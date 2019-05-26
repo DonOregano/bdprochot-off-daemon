@@ -1,0 +1,9 @@
+#!/bin/bash
+# Ensure the processor is running at peak performance all the time
+if [ "${1}" == "pre" ]; then
+  /bin/true
+elif [ "${1}" == "post" ]; then
+  # Disable bdprochot flag in bios when resuming from standby
+  /sbin/modprobe msr
+  /usr/sbin/wrmsr -a 0x1FC 262236
+fi

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ ${1} == "wlp2s0" ]; then
+# Unload the module (firmware will crash) before it crashes irrevocably
+  /sbin/modprobe -r ath10k_pci
+  /bin/sleep 1
+fi
