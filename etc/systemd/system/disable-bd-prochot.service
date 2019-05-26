@@ -1,0 +1,12 @@
+[Unit]
+Description=Disable BD PROCHOT Processor Flag
+
+[Service]
+User=root
+Type=oneshot
+ExecStart=/sbin/modprobe msr
+ExecStart=/usr/sbin/wrmsr -a 0x1FC 262236
+
+[Install]
+WantedBy=multi-user.target
+
