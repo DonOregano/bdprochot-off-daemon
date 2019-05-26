@@ -12,6 +12,7 @@ BD_PROCHOT related tools require the use of the msr module and the msr-tools pac
 Copy this file to the same location in the root of your system and run:
 
 `sudo systemctl enable disable-bd-prochot`
+
 `sudo systemctl start disable-bd-prochot`
 
 This will disable BD_PROCHOT at system startup. This is necessary on the Yoga 3-11 because of its *terribly* tuned hardware CPU 
