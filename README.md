@@ -15,7 +15,9 @@ Copy this file to the same location in the root of your system and run:
 
 `sudo systemctl start disable-bd-prochot`
 
-This will disable BD_PROCHOT at system startup. This is necessary on the Yoga 3-11 because of its *terribly* tuned hardware CPU 
+Also ensure to copy usr/local/sbin/disable-prochot.py to the same path in your system and ensure it is root executable. Python3 is necessary as is the python-daemon package.
+
+This will run a daemon to ensure BD_PROCHOT remains disabled. This is necessary on the Yoga 3-11 because of its *terribly* tuned hardware CPU 
 throttling settings. They are well known to be overzealous and, once they've kicked in, they never leave the throttled state on
 their own, causing a system to be virtually unusable at around 400-500MHz with no Turbo. This was a well known issue in Windows
 which the ThrottleStop software often had to be used to prevent.
