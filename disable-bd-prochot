@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+"""
+Borrowed code from https://github.com/andikleen/pmu-tools/blob/master/msr.py
+"""
 
-import daemon
 import glob
-import lockfile
 import os
 import signal
 import struct
@@ -10,12 +11,15 @@ import sys
 import syslog
 import time
 
+import daemon
+import lockfile
+
 PROCHOT_MSR = 0x1FC
 NO_PROCHOT = 262236
 
-# Borrowed code from https://github.com/andikleen/pmu-tools/blob/master/msr.py
 
 def writemsr(msr, val):
+    """Write MSR registers"""
     n = glob.glob('/dev/cpu/[0-9]*/msr')
     for c in n:
         f = os.open(c, os.O_WRONLY)
@@ -24,8 +28,9 @@ def writemsr(msr, val):
         os.close(f)
     if not n:
         raise OSError("msr module not loaded (run modprobe msr)")
-    
+
 def readmsr(msr, cpu = 0):
+    """Read MSR register"""
     f = os.open('/dev/cpu/%d/msr' % (cpu,), os.O_RDONLY)
     os.lseek(f, msr, os.SEEK_SET)
     val = struct.unpack('Q', os.read(f, 8))[0]
@@ -33,8 +38,9 @@ def readmsr(msr, cpu = 0):
     return val
 
 def main():
+    """Main daemon function. Loops forever checking and setting BD_PROCHOT to off"""
     syslog.syslog(syslog.LOG_INFO, "Started monitoring for BD_PROCHOT status.")
-    while(1):
+    while True:
         rmsr = readmsr(PROCHOT_MSR)
         if rmsr != NO_PROCHOT:
             syslog.syslog(syslog.LOG_INFO, "BD_PROCHOT is on for some reason, status: {}. Resetting to {}.".format(rmsr, NO_PROCHOT))
@@ -42,9 +48,11 @@ def main():
         time.sleep(5)
 
 def shutdown(signum, frame):
+    """Signal handler for termination signals"""
     syslog.syslog(syslog.LOG_INFO, "Stopped monitoring; shutdown signal received.")
     sys.exit(0)
 
+#Call the main function using a daemon context
 with daemon.DaemonContext(
     pidfile=lockfile.FileLock('/var/run/disable-prochot.pid'),
     signal_map={

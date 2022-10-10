@@ -1,10 +1,10 @@
 [Unit]
-Description=Disable BD PROCHOT Processor Flag
+Description=Disable BD PROCHOT processor flag whenever it gets enabled
 
 [Service]
 User=root
 Type=exec
-ExecStart=/usr/local/sbin/disable-prochot.py
+ExecStart=/usr/bin/disable-bd-prochot
 
 [Install]
 WantedBy=multi-user.target
